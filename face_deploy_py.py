@@ -33,14 +33,30 @@ def predict_face(img):
     prediction = model.predict([embedding])
     return prediction[0]
 
-# Streamlit UI
+# Streamlit UI Title
 st.title("Face Recognition App")
+
+# List of celebrities
+celebrities = [
+    "Angelina Jolie", "Brad Pitt", "Denzel Washington", "Hugh Jackman",
+    "Jennifer Lawrence", "Johnny Depp", "Megan Fox", "Tom Cruise",
+    "Tom Hanks", "Will Smith"
+]
+
+# Info message
+st.info(
+    f"Please upload a clear image of one of the following celebrities for recognition:\n\n"
+    + "\n".join(f"- {name}" for name in celebrities)
+)
+
+# Upload file
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     img = cv2.imdecode(file_bytes, 1)
     st.image(img, caption="Uploaded Image", use_column_width=True)
+    st.success("Image uploaded. Running recognition...")
 
     prediction = predict_face(img)
     st.write(f"Predicted Person: {prediction}")
